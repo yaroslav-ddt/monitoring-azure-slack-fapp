@@ -53,7 +53,7 @@ $alert = $request.body
 $SLACK_MSG_TEMPLATE.blocks[0].text.text = "The pod in the namespace has been killed"
 $SLACK_MSG_TEMPLATE.attachments[0].blocks[0].text.text = $alert | convertto-json  -Depth 10
 
-write-host $SLACK_MSG_TEMPLATE
+write-host $SLACK_MSG_TEMPLATE.attachments[0].blocks[0].text.text
 #Extract projected fields from Log Search Alert
 # $computer = $alert.body.data.alertContext.SearchResults.tables.rows[0]
 # $svcname = $alert.body.data.alertContext.SearchResults.tables.rows[1]
