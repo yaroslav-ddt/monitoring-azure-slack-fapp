@@ -10,7 +10,8 @@ Write-Host "PowerShell HTTP trigger function processed a request."
 $alert = $request.body | ConvertTo-Json
 
 #extract Affected cI
-write-host "Alert Body" $alert
+write-host "Alert Body:"
+write-host $alert
 
 
 #Extract projected fields from Log Search Alert
