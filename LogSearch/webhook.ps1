@@ -50,16 +50,10 @@ $SLACK_MSG_TEMPLATE = @"
 
 $alert = $request.body
 
-$SLACK_MSG_TEMPLATE.blocks[0].text.text = "The pod $($alert.data.alertContext.condition.allOf[0].dimensions[0].value) has been killed"
-$SLACK_MSG_TEMPLATE.attachments[0].blocks[0].text.text = "linkToFilteredSearchResultsUI:"+$alert.data.alertContext.condition.allOf[0].linkToFilteredSearchResultsUI
+$SLACK_MSG_TEMPLATE.blocks[0].text.text = $alert.data.essentials.alertRule+": The pod $($alert.data.alertContext.condition.allOf[0].dimensions[0].value) has been killed\n"
+$SLACK_MSG_TEMPLATE.blocks[2].text.text = "Please find log query result by the link:"
+$SLACK_MSG_TEMPLATE.attachments[0].blocks[0].text.text = $alert.data.alertContext.condition.allOf[0].linkToFilteredSearchResultsUI
 
 Invoke-WebRequest -Method POST -ContentType "application/json" -Body ($SLACK_MSG_TEMPLATE|convertto-json -Depth 10) -Uri $env:SLACK_HOOK_URL
-#Extract projected fields from Log Search Alert
-# $computer = $alert.body.data.alertContext.SearchResults.tables.rows[0]
-# $svcname = $alert.body.data.alertContext.SearchResults.tables.rows[1]
-# $svcstate = $alert.body.data.alertContext.SearchResults.tables.rows[2]
-# $svcdisplayname = $alert.body.data.alertContext.SearchResults.tables.rows[3]
-# $TimeGenerated = $alert.body.data.alertContext.SearchResults.tables.rows[4]
 
-# write-host "Computer" $computer "svc name" $svcname "svcstate" $svcstate "svc displayname" $svcdisplayname "TimeGenerated" $timegenerated
         
