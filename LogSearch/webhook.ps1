@@ -7,7 +7,7 @@ param($Request, $TriggerMetadata)
 Write-Host "PowerShell HTTP trigger function processed a request."
 
 
-$alert = $request.body
+$alert = $request.body | ConvertTo-Json
 
 #extract Affected cI
 write-host "Alert Body" $alert
