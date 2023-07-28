@@ -56,7 +56,7 @@ $SLACK_MSG_TEMPLATE.attachments[0].blocks[0].text.text = $alert.data.alertContex
 write-host $SLACK_MSG_TEMPLATE.attachments[0].blocks[0].text.text
 write-host $SLACK_MSG_TEMPLATE.blocks[0].text.text
 
-Invoke-WebRequest -Method POST -Headers @{"Content-Type" = "application/json"} -Body $($SLACK_MSG_TEMPLATE|convertto-json -Depth 10) -Uri $env:SLACK_HOOK_URL
+Invoke-WebRequest -Method POST -Headers @{"Content-Type" = "application/json"} -Body ($SLACK_MSG_TEMPLATE|convertto-json -Depth 10) -Uri $env:SLACK_HOOK_URL
 #Extract projected fields from Log Search Alert
 # $computer = $alert.body.data.alertContext.SearchResults.tables.rows[0]
 # $svcname = $alert.body.data.alertContext.SearchResults.tables.rows[1]
