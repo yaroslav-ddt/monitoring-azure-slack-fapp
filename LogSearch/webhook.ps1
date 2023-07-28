@@ -6,16 +6,54 @@ param($Request, $TriggerMetadata)
 # Write to the Azure Functions log stream.
 Write-Host "PowerShell HTTP trigger function processed a request."
 
+$SLACK_HOOK_URL = $env:SLACK_HOOK_URL
 
-$alert = $request.body | ConvertTo-Json
-$alertcontext = $Request.body.data.alertContext | convertto-json
-#extract Affected cI
-write-host "Alert Body:"
-write-host $alert
-Write-Host "Alert Context:"
-write-host $alertcontext
+$SLACK_MSG_TEMPLATE = @"
+{
+    "blocks": [
+        {
+            "type": "header",
+            "text": {
+                "type": "plain_text",
+                "text": "DigiKoo Cloud Azure Alert"
+            }
+        },
+        {
+            "type": "divider"
+        },
+        {
+            "type": "section",
+            "text": {
+                "type": "mrkdwn",
+                "text": "REPLACE_ME_SUMMARY_MARKER"
+            }
+        },
+        {
+            "type": "divider"
+        }
+    ],
+    "attachments": [
+        {
+            "blocks": [
+                {
+                    "type": "section",
+                    "text": {
+                        "type": "mrkdwn",
+                        "text": "REPLACE_ME_FULL_BODY_MARKER"
+                    }
+                }
+            ]
+        }
+    ]
+}
+"@ | convertfrom-json
 
+$alert = $request.body
 
+$SLACK_MSG_TEMPLATE.blocks[0].text.text = "The pod in the namespace has been killed"
+$SLACK_MSG_TEMPLATE.attachments[0].blocks[0].text.text = $alert | convertto-json  -Depth 10
+
+write-host $SLACK_MSG_TEMPLATE
 #Extract projected fields from Log Search Alert
 # $computer = $alert.body.data.alertContext.SearchResults.tables.rows[0]
 # $svcname = $alert.body.data.alertContext.SearchResults.tables.rows[1]
