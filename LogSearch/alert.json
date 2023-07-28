@@ -1,0 +1,25 @@
+{
+    "data": {
+        "alertContext": {
+            "condition": "System.Collections.Hashtable",
+            "properties": "System.Collections.Hashtable",
+            "conditionType": "LogQueryCriteria"
+        },
+        "essentials": {
+            "alertTargetIDs": "/subscriptions/11111111-1111-1111-1111-111111111111/resourcegroups/test-RG/providers/microsoft.operationalinsights/workspaces/test-logAnalyticsWorkspace",
+            "monitoringService": "Log Alerts V2",
+            "alertContextVersion": "1.0",
+            "originAlertId": "22222222-2222-2222-2222-222222222222",
+            "firedDateTime": "2023-07-28T07:07:29.786Z",
+            "severity": "Sev3",
+            "alertId": "/subscriptions/11111111-1111-1111-1111-111111111111/providers/Microsoft.AlertsManagement/alerts/12345678-1234-1234-1234-1234567890ab",
+            "monitorCondition": "Fired",
+            "essentialsVersion": "1.0",
+            "alertRule": "test-logAlertRule-v2",
+            "description": "Alert rule description",
+            "configurationItems": "test-computer",
+            "signalType": "Log"
+        }
+    },
+    "schemaId": "azureMonitorCommonAlertSchema"
+}
