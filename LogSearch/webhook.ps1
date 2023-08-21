@@ -49,13 +49,34 @@ $SLACK_MSG_TEMPLATE = @"
 "@ | convertfrom-json
 
 $alert = $request.body
+
+$alertLevel = switch ($alert.data.essentials.severity) {
+    "Sev1" { "Critical" }
+    "Sev2" { "Error" }
+    "Sev3" { "Warning" }
+    "Sev4" { "Informational" }
+    Default { "Informational"}
+}
+
+$SLACK_MSG_TEMPLATE.blocks[0].text.text = $alertLevel+": "+$alert.data.essentials.alertRule+": "+$alert.data.alertContext.condition.allOf[0].dimensions[0].value
+$SLACK_MSG_TEMPLATE.blocks[2].text.text = "Please find more details by the link:"
+
+switch ($alert.data.alertContext.conditionType) {
+    "LogQueryCriteria" {  
+        $SLACK_MSG_TEMPLATE.attachments[0].blocks[0].text.text = $alert.data.alertContext.condition.allOf[0].linkToFilteredSearchResultsUI
+    }
+    "SingleResourceMultipleMetricCriteria" {
+        $SLACK_MSG_TEMPLATE.attachments[0].blocks[0].text.text = $alert.data.alertContext.condition.allOf[0].metricName+" is "+$alert.data.alertContext.condition.allOf[0].operator+" "$alert.data.alertContext.condition.allOf[0].metricValue
+    }
+    Default {
+        $SLACK_MSG_TEMPLATE.attachments[0].blocks[0].text.text = "Unrecongnized type of alert. Please check the function app logs."
+    }
+}
+
 write-host "==============Alert Body======================"
 write-host ($alert | convertto-json -Depth 10)
-$SLACK_MSG_TEMPLATE.blocks[0].text.text = $alert.data.essentials.alertRule+": "+$alert.data.alertContext.condition.allOf[0].dimensions[0].value
-$SLACK_MSG_TEMPLATE.blocks[2].text.text = "Please find more details by the link:"
-$SLACK_MSG_TEMPLATE.attachments[0].blocks[0].text.text = $alert.data.alertContext.condition.allOf[0].linkToFilteredSearchResultsUI
 
-#Invoke-WebRequest -Method POST -ContentType "application/json" -Body ($SLACK_MSG_TEMPLATE|convertto-json -Depth 10) -Uri $env:SLACK_HOOK_URL
+Invoke-WebRequest -Method POST -ContentType "application/json" -Body ($SLACK_MSG_TEMPLATE|convertto-json -Depth 10) -Uri $env:SLACK_HOOK_URL
 write-host "===============SLACK========================="
 write-host ($SLACK_MSG_TEMPLATE | convertto-json -Depth 10)
         
