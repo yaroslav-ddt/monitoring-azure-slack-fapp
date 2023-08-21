@@ -51,11 +51,11 @@ $SLACK_MSG_TEMPLATE = @"
 $alert = $request.body
 
 $alertLevel = switch ($alert.data.essentials.severity) {
-    "Sev1" { "Critical" }
-    "Sev2" { "Error" }
-    "Sev3" { "Warning" }
-    "Sev4" { "Informational" }
-    Default { "Informational"}
+    "Sev0" { "Critical" }
+    "Sev1" { "Error" }
+    "Sev2" { "Warning" }
+    "Sev3" { "Informational" }
+    Default { "Verbose"}
 }
 
 $SLACK_MSG_TEMPLATE.blocks[0].text.text = $alertLevel+": "+$alert.data.essentials.alertRule+": "+$alert.data.alertContext.condition.allOf[0].dimensions[0].value
