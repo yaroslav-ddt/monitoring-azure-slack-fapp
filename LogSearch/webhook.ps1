@@ -59,17 +59,19 @@ $alertLevel = switch ($alert.data.essentials.severity) {
 }
 
 $SLACK_MSG_TEMPLATE.blocks[0].text.text = $alertLevel+": "+$alert.data.essentials.alertRule+": "+$alert.data.alertContext.condition.allOf[0].dimensions[0].value
-$SLACK_MSG_TEMPLATE.blocks[2].text.text = "Please find more details by the link:"
 
 switch ($alert.data.alertContext.conditionType) {
     "LogQueryCriteria" {  
+        $SLACK_MSG_TEMPLATE.blocks[2].text.text = "Please find more details by the link:"
         $SLACK_MSG_TEMPLATE.attachments[0].blocks[0].text.text = $alert.data.alertContext.condition.allOf[0].linkToFilteredSearchResultsUI
     }
     "SingleResourceMultipleMetricCriteria" {
+        $SLACK_MSG_TEMPLATE.blocks[2].text.text = "Metric details:"
         $SLACK_MSG_TEMPLATE.attachments[0].blocks[0].text.text = $alert.data.alertContext.condition.allOf[0].metricName+" is "+$alert.data.alertContext.condition.allOf[0].operator+" "+$alert.data.alertContext.condition.allOf[0].metricValue
     }
     Default {
-        $SLACK_MSG_TEMPLATE.attachments[0].blocks[0].text.text = "Unrecongnized type of alert. Please check the function app logs."
+        $SLACK_MSG_TEMPLATE.blocks[2].text.text = "Please find more details below:"        
+        $SLACK_MSG_TEMPLATE.attachments[0].blocks[0].text.text = "Unrecongnized type of alert. Please check the function app logs. Alert ID:"+$alert.data.essentials.alertId
     }
 }
 
