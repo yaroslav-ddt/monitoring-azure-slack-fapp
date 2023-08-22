@@ -66,7 +66,7 @@ switch ($alert.data.alertContext.conditionType) {
         $SLACK_MSG_TEMPLATE.attachments[0].blocks[0].text.text = $alert.data.alertContext.condition.allOf[0].linkToFilteredSearchResultsUI
     }
     "SingleResourceMultipleMetricCriteria" {
-        $SLACK_MSG_TEMPLATE.attachments[0].blocks[0].text.text = $alert.data.alertContext.condition.allOf[0].metricName+" is "+$alert.data.alertContext.condition.allOf[0].operator+" "$alert.data.alertContext.condition.allOf[0].metricValue
+        $SLACK_MSG_TEMPLATE.attachments[0].blocks[0].text.text = $alert.data.alertContext.condition.allOf[0].metricName+" is "+$alert.data.alertContext.condition.allOf[0].operator+" "+$alert.data.alertContext.condition.allOf[0].metricValue
     }
     Default {
         $SLACK_MSG_TEMPLATE.attachments[0].blocks[0].text.text = "Unrecongnized type of alert. Please check the function app logs."
